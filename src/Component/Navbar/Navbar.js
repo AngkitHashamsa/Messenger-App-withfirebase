@@ -8,21 +8,23 @@ const Navbar = () => {
   // const handleClick = () => {
   //   setPathName(window.location.pathname);
   // };
-  const { handleLogOut } = useAuthProvider();
+  const { handleLogOut, loading } = useAuthProvider();
   let token = localStorage.getItem("Auth Token");
   console.log(token);
   return (
     <nav className="bg-black">
       <div className="section-center flex justify-between justify-items-center py-7">
         <div>
-          <Link to="/" className="capitalize ">
+          <Link to={token ? "/" : "/login"} className="capitalize ">
             message
           </Link>
         </div>
         <ul className="flex">
           {token ? (
             <li>
-              <button onClick={(e) => handleLogOut(e)}>log out</button>
+              <button onClick={(e) => handleLogOut(e)}>
+                {loading ? "loggin out...." : "log out"}
+              </button>
             </li>
           ) : (
             link.map((item) => {

@@ -87,13 +87,16 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogOut = async (e) => {
     try {
+      setLoading(true);
       await updateDoc(doc(db, "Users", auth.currentUser.uid), {
         isOnline: false,
       });
       await signOut(auth);
       localStorage.clear();
+      setLoading(false);
       navigate("/login");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
