@@ -5,6 +5,7 @@ import { setDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 const AuthContext = React.createContext();
 
@@ -85,9 +86,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleLogOut = async (e) => {
-    e.preventDefault();
-    localStorage.removeItem("Auth Token");
-    navigate("/login");
+    try {
+      await updateDoc(doc(db, "Users", auth.currentUser.uid), {
+        isOnline: false,
+      });
+      await signOut(auth);
+      localStorage.clear();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
