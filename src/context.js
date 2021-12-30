@@ -30,7 +30,9 @@ export const AuthProvider = ({ children }) => {
         const res = await createUserWithEmailAndPassword(auth, email, password);
         console.log(res);
         if (res) {
+          const { uid } = res.user;
           localStorage.setItem("Auth Token", res._tokenResponse.refreshToken);
+          localStorage.setItem("UserId", uid);
           const docData = {
             uid: res.user.uid,
             name: userName,
@@ -64,7 +66,9 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         const res = await signInWithEmailAndPassword(auth, email, password);
         if (res) {
+          const { uid } = res.user;
           localStorage.setItem("Auth Token", res._tokenResponse.refreshToken);
+          localStorage.setItem("UserId", uid);
           console.log(res);
           const docData = {
             isOnline: true,
@@ -83,6 +87,7 @@ export const AuthProvider = ({ children }) => {
   const handleLogOut = async (e) => {
     e.preventDefault();
     localStorage.removeItem("Auth Token");
+    navigate("/login");
   };
 
   return (
