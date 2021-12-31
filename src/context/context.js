@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
+  // console.log(auth.currentUser);
   const handleCLick = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
@@ -70,7 +71,7 @@ export const AuthProvider = ({ children }) => {
           const { uid } = res.user;
           localStorage.setItem("Auth Token", res._tokenResponse.refreshToken);
           localStorage.setItem("UserId", uid);
-          console.log(res);
+          // console.log(res);
           const docData = {
             isOnline: true,
           };
@@ -86,6 +87,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleLogOut = async (e) => {
+    console.log(auth.currentUser.uid);
     try {
       setLoading(true);
       await updateDoc(doc(db, "Users", auth.currentUser.uid), {

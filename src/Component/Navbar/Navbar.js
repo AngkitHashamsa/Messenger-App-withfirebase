@@ -2,6 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { link } from "../../Data/data";
 import { useAuthProvider } from "../../context/context";
+import { useHomeProvider } from "../../context/HomeContext";
 import profilePic from "../../static/profile-Image.png";
 const Navbar = () => {
   // const [pathName, setPathName] = useState(window.location.pathname);
@@ -10,6 +11,7 @@ const Navbar = () => {
   //   setPathName(window.location.pathname);
   // };
   const { handleLogOut, loading } = useAuthProvider();
+  const { user } = useHomeProvider();
   let token = localStorage.getItem("Auth Token");
 
   return (
@@ -26,9 +28,9 @@ const Navbar = () => {
               <li className="mr-3">
                 <NavLink to="/profile" className="flex place-content-center">
                   <img
-                    src={profilePic}
+                    src={user?.avatar ? user?.avatar : profilePic}
                     alt="profile image"
-                    width={22}
+                    width={26}
                     height={16}
                     className="rounded-full mr-2"
                   />

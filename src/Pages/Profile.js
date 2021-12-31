@@ -3,22 +3,24 @@ import profileImage from "../static/profile-Image.png";
 
 import { BsCameraFill } from "react-icons/bs";
 import { useHomeProvider } from "../context/HomeContext";
+
+const HomeContext = React.createContext();
 const Profile = () => {
-  const { profileImages, setProfileImages } = useHomeProvider();
-  console.log(profileImages);
+  const { setProfileImages, user } = useHomeProvider();
+
   return (
     <main>
       <div className="section-center mt-20 grid justify-center items-center">
-        <div className="py-10 px-10 rounded-lg flex flex-col justify-start items-start sm:flex-row bg-gray-400 ">
-          <div className=" relative ">
+        <div className="py-10 px-10 rounded-lg flex flex-col sm:justify-start sm:items-start sm:flex-row bg-gray-400 justify-center items-center text-center ">
+          <div className=" relative  ">
             <img
-              src={profileImage}
+              src={user?.avatar ? user?.avatar : profileImage}
               alt="profile"
-              className="w-20 h-20 sm:mr-8 rounded-full"
+              className="w-20 h-20 sm:mr-8 rounded-full hover:cursor-pointer"
             />
-            <div className="absolute top-7 left-7">
+            <div className="absolute top-7 left-7 opacity-50 hover:opacity-90 ">
               <label htmlFor="photo">
-                <BsCameraFill className="text-2xl text-gray-800 " />
+                <BsCameraFill className="text-2xl text-gray-800 hover:cursor-pointer" />
               </label>
               <input
                 type="file"
@@ -31,9 +33,9 @@ const Profile = () => {
             </div>
           </div>
 
-          <div>
-            <h3>user name</h3>
-            <p>user email</p>
+          <div className="sm:pr-7">
+            <h3>{user?.name}</h3>
+            <p>{user?.email}</p>
             <hr />
             <small>join on:...</small>
           </div>
