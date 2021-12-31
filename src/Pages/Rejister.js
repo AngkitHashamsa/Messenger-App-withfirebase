@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { useAuthProvider } from "../context";
+import { useAuthProvider } from "../context/context";
 
 const Rejister = () => {
   const {

@@ -6,6 +6,7 @@ import Navbar from "./Component/Navbar/Navbar";
 import Error from "./Pages/Error";
 import { useEffect } from "react";
 import Profile from "./Pages/Profile";
+import PrivateRoute from "./PrivateRoute";
 function App() {
   // const navigate = useNavigate();
   // useEffect(() => {
@@ -21,10 +22,24 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/register" element={<Rejister />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<Error />} />
       </Routes>
     </>
