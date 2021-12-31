@@ -4,20 +4,10 @@ import Login from "./Pages/Login";
 import Rejister from "./Pages/Rejister";
 import Navbar from "./Component/Navbar/Navbar";
 import Error from "./Pages/Error";
-import { useEffect } from "react";
+
 import Profile from "./Pages/Profile";
 import PrivateRoute from "./PrivateRoute";
 function App() {
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   let token = localStorage.getItem("Auth Token");
-  //   if (token) {
-  //     navigate("/");
-  //   }
-  //   if (!token) {
-  //     navigate("/login");
-  //   }
-  // }, []);
   return (
     <>
       <Navbar />

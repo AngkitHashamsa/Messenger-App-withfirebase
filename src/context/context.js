@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
+
   // console.log(auth.currentUser);
   const handleCLick = (e) => {
     e.preventDefault();
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children }) => {
             isOnline: true,
           };
           await setDoc(doc(db, "Users", res.user.uid), docData);
+
           navigate("/");
         }
 
@@ -59,7 +61,7 @@ export const AuthProvider = ({ children }) => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log("added");
+
     if (!password || !email) {
       alert("plese Enter the value");
     }
@@ -77,6 +79,7 @@ export const AuthProvider = ({ children }) => {
           };
           await updateDoc(doc(db, "Users", res.user.uid), docData);
           setLoading(false);
+
           navigate("/");
         }
       } catch (error) {
@@ -87,7 +90,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleLogOut = async (e) => {
-    console.log(auth.currentUser.uid);
     try {
       setLoading(true);
       await updateDoc(doc(db, "Users", auth.currentUser.uid), {
@@ -96,6 +98,7 @@ export const AuthProvider = ({ children }) => {
       await signOut(auth);
       localStorage.clear();
       setLoading(false);
+
       navigate("/login");
     } catch (error) {
       setLoading(false);

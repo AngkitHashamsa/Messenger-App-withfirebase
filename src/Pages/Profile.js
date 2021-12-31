@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import profileImage from "../static/profile-Image.png";
 
 import { BsCameraFill } from "react-icons/bs";
 import { useHomeProvider } from "../context/HomeContext";
 
-const HomeContext = React.createContext();
 const Profile = () => {
-  const { setProfileImages, user } = useHomeProvider();
+  const { setProfileImages, user, deletePhoto, isLoading } = useHomeProvider();
 
+  if (isLoading) {
+    return (
+      <main>
+        <div className="section-center grid  h-screen justify-center items-center text-center ">
+          <h2>Loading ...</h2>
+        </div>
+      </main>
+    );
+  }
+  console.log();
   return (
     <main>
       <div className="section-center mt-20 grid justify-center items-center">
@@ -31,13 +40,20 @@ const Profile = () => {
                 onChange={(e) => setProfileImages(e.target.files[0])}
               />
             </div>
+            {user?.avatar && (
+              <button onClick={deletePhoto}>delete profile</button>
+            )}
           </div>
 
           <div className="sm:pr-7">
             <h3>{user?.name}</h3>
             <p>{user?.email}</p>
             <hr />
-            <small>join on:...</small>
+            <small>
+              Join on:{" "}
+              {(user.createdAt && user.createdAt.toDate().toDateString()) ||
+                "no data"}
+            </small>
           </div>
         </div>
       </div>

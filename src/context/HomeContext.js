@@ -1,12 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
 import { storage, db, auth } from "../firebase.config";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytes,
+  deleteObject,
+} from "firebase/storage";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 const HomeContext = React.createContext();
 
 export const HomeProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [profileImages, setProfileImages] = useState(null);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState([]);
+  const [isLoading, setLoading] = useState();
   let userId = localStorage.getItem("UserId");
   const getData = async () => {
     return await getDoc(doc(db, "Users", userId)).then((docSnap) => {
@@ -17,7 +25,6 @@ export const HomeProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getData();
     if (profileImages) {
       const uploadImg = async () => {
         try {
@@ -25,6 +32,9 @@ export const HomeProvider = ({ children }) => {
             storage,
             `Avatar/${new Date().getTime()} - ${profileImages.name}`
           );
+          if (user?.avatarPath) {
+            await deleteObject(ref(storage, user?.avatarPath));
+          }
           const snap = await uploadBytes(imageRef, profileImages);
 
           let url = await getDownloadURL(ref(storage, snap.ref.fullPath));
@@ -34,6 +44,7 @@ export const HomeProvider = ({ children }) => {
             avatar: url,
             avatarPath: snap.ref.fullPath,
           });
+          getData();
           setProfileImages("");
         } catch (error) {
           console.log(error);
@@ -43,8 +54,35 @@ export const HomeProvider = ({ children }) => {
     }
   }, [profileImages]);
 
+  const deletePhoto = async () => {
+    try {
+      const confirm = window.confirm("Are you sure you want to remove image");
+      if (confirm) {
+        await deleteObject(ref(storage, user?.avatarPath));
+        await updateDoc(doc(db, "Users", userId), {
+          avatar: "",
+          avatarPath: "",
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <HomeContext.Provider value={{ profileImages, setProfileImages, user }}>
+    <HomeContext.Provider
+      value={{
+        profileImages,
+        setProfileImages,
+        user,
+        setUser,
+        getData,
+        deletePhoto,
+        isLoading,
+        setLoading,
+      }}
+    >
       {children}
     </HomeContext.Provider>
   );
