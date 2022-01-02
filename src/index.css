@@ -3,13 +3,17 @@
 @tailwind utilities;
 
 .section-center {
-  @apply max-w-4xl mx-auto w-11/12;
+  @apply max-w-3xl mx-auto w-11/12;
 }
 
 body {
-  @apply bg-gray-500 text-white;
+  @apply bg-gray-700 text-white;
 }
 
 .active {
   @apply ml-3 text-blue-400;
+}
+
+.body-height {
+  height: calc(100vh - 5.25rem);
 }

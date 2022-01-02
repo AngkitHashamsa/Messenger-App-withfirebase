@@ -1,28 +1,29 @@
-import React, { useState, useContext, useEffect } from "react";
-import { storage, db, auth } from "../firebase.config";
+import React, { useState, useContext, useEffect } from 'react'
+import { storage, db, auth } from '../firebase.config'
 import {
   ref,
   getDownloadURL,
   uploadBytes,
   deleteObject,
-} from "firebase/storage";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-const HomeContext = React.createContext();
+} from 'firebase/storage'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { useNavigate } from 'react-router-dom'
+
+const HomeContext = React.createContext()
 
 export const HomeProvider = ({ children }) => {
-  const navigate = useNavigate();
-  const [profileImages, setProfileImages] = useState(null);
-  const [user, setUser] = useState([]);
-  const [isLoading, setLoading] = useState();
-  let userId = localStorage.getItem("UserId");
+  const navigate = useNavigate()
+  const [profileImages, setProfileImages] = useState(null)
+  const [user, setUser] = useState([])
+  const [isLoading, setLoading] = useState()
+  let userId = localStorage.getItem('UserId')
   const getData = async () => {
-    return await getDoc(doc(db, "Users", userId)).then((docSnap) => {
+    return await getDoc(doc(db, 'Users', userId)).then((docSnap) => {
       if (docSnap.exists) {
-        setUser(docSnap.data());
+        setUser(docSnap.data())
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     if (profileImages) {
@@ -31,44 +32,44 @@ export const HomeProvider = ({ children }) => {
           const imageRef = ref(
             storage,
             `Avatar/${new Date().getTime()} - ${profileImages.name}`
-          );
+          )
           if (user?.avatarPath) {
-            await deleteObject(ref(storage, user?.avatarPath));
+            await deleteObject(ref(storage, user?.avatarPath))
           }
-          const snap = await uploadBytes(imageRef, profileImages);
+          const snap = await uploadBytes(imageRef, profileImages)
 
-          let url = await getDownloadURL(ref(storage, snap.ref.fullPath));
+          let url = await getDownloadURL(ref(storage, snap.ref.fullPath))
           // console.log(snap.ref.fullPath);
           // console.log(url);
-          await updateDoc(doc(db, "Users", userId), {
+          await updateDoc(doc(db, 'Users', userId), {
             avatar: url,
             avatarPath: snap.ref.fullPath,
-          });
-          getData();
-          setProfileImages("");
+          })
+          getData()
+          setProfileImages('')
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
-      };
-      uploadImg();
+      }
+      uploadImg()
     }
-  }, [profileImages]);
+  }, [profileImages])
 
   const deletePhoto = async () => {
     try {
-      const confirm = window.confirm("Are you sure you want to remove image");
+      const confirm = window.confirm('Are you sure you want to remove image')
       if (confirm) {
-        await deleteObject(ref(storage, user?.avatarPath));
-        await updateDoc(doc(db, "Users", userId), {
-          avatar: "",
-          avatarPath: "",
-        });
-        navigate("/");
+        await deleteObject(ref(storage, user?.avatarPath))
+        await updateDoc(doc(db, 'Users', userId), {
+          avatar: '',
+          avatarPath: '',
+        })
+        navigate('/')
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   return (
     <HomeContext.Provider
@@ -85,9 +86,9 @@ export const HomeProvider = ({ children }) => {
     >
       {children}
     </HomeContext.Provider>
-  );
-};
+  )
+}
 
 export const useHomeProvider = () => {
-  return useContext(HomeContext);
-};
+  return useContext(HomeContext)
+}
