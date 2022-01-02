@@ -17,3 +17,10 @@ body {
 .body-height {
   height: calc(100vh - 5.25rem);
 }
+
+.user-black {
+  @apply text-left w-full rounded-lg my-2 py-3 pl-2 pr-2 bg-gray-500;
+}
+.user-white {
+  @apply text-left w-full rounded-lg my-2 py-3 pl-2 pr-2 bg-white text-gray-700;
+}

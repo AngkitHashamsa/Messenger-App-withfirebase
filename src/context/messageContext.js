@@ -7,6 +7,7 @@ import {
   query,
   orderBy,
   onSnapshot,
+  doc,
 } from 'firebase/firestore'
 import {
   ref,
@@ -32,9 +33,9 @@ export const MessageProvider = ({ children }) => {
     const q = query(messageRef, orderBy('createdAt', 'asc'))
     onSnapshot(q, (querySnapshot) => {
       let msg = []
+
       querySnapshot.forEach((doc) => {
-        console.log(doc)
-        msg.push(doc.data())
+        msg.push({ id: doc.id, ...doc.data() })
       })
       setMessages(msg)
     })

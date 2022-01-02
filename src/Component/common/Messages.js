@@ -1,10 +1,21 @@
 import React from 'react'
 
-const Messages = ({ item }) => {
-  console.log(item)
+const Messages = ({ item, chat }) => {
+  let userId = localStorage.getItem('UserId')
   return (
-    <div className=' text-left w-full rounded-lg my-2 py-3 pl-1 pr-2 bg-gray-500'>
-      {item.media && <img src={item.media} alt='' />}
+    <div className={`${item.from === userId ? 'user-white' : 'user-black'}`}>
+      {item.from === userId ? (
+        <div className='flex justify-between items-center'>
+          <h6 className='text-sm'>You</h6>
+          <p>{item.createdAt && item.createdAt.toDate().toDateString()}</p>
+        </div>
+      ) : (
+        <div className='flex justify-between items-center'>
+          <h6>{chat.name}</h6>
+          <p>{item.createdAt && item.createdAt.toDate().toDateString()}</p>
+        </div>
+      )}
+      {item.media && <img src={item.media} alt='pic' />}
       {item.text && <p>{item.text}</p>}
     </div>
   )
