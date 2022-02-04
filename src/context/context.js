@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { auth, db } from "./firebase.config";
+import { auth, db } from "../firebase.config";
 import { useNavigate } from "react-router-dom";
 import { setDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import {
@@ -16,6 +16,8 @@ export const AuthProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
+
+  // console.log(auth.currentUser);
   const handleCLick = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
@@ -42,6 +44,7 @@ export const AuthProvider = ({ children }) => {
             isOnline: true,
           };
           await setDoc(doc(db, "Users", res.user.uid), docData);
+
           navigate("/");
         }
 
@@ -58,7 +61,7 @@ export const AuthProvider = ({ children }) => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log("added");
+
     if (!password || !email) {
       alert("plese Enter the value");
     }
@@ -70,12 +73,13 @@ export const AuthProvider = ({ children }) => {
           const { uid } = res.user;
           localStorage.setItem("Auth Token", res._tokenResponse.refreshToken);
           localStorage.setItem("UserId", uid);
-          console.log(res);
+          // console.log(res);
           const docData = {
             isOnline: true,
           };
           await updateDoc(doc(db, "Users", res.user.uid), docData);
           setLoading(false);
+
           navigate("/");
         }
       } catch (error) {
@@ -87,13 +91,17 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogOut = async (e) => {
     try {
+      setLoading(true);
       await updateDoc(doc(db, "Users", auth.currentUser.uid), {
         isOnline: false,
       });
       await signOut(auth);
       localStorage.clear();
+      setLoading(false);
+
       navigate("/login");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };

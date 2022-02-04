@@ -3,13 +3,24 @@
 @tailwind utilities;
 
 .section-center {
-  @apply max-w-4xl mx-auto w-11/12;
+  @apply max-w-3xl mx-auto w-11/12;
 }
 
 body {
-  @apply bg-gray-500 text-white;
+  @apply bg-gray-700 text-white;
 }
 
 .active {
   @apply ml-3 text-blue-400;
+}
+
+.body-height {
+  height: calc(100vh - 5.25rem);
+}
+
+.user-black {
+  @apply text-left w-full rounded-lg my-2 py-3 pl-2 pr-2 bg-gray-500;
+}
+.user-white {
+  @apply text-left w-full rounded-lg my-2 py-3 pl-2 pr-2 bg-white text-gray-700;
 }
